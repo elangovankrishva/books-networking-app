@@ -32,7 +32,7 @@ class UserProfile extends Component {
 
   render() {
     if (!localStorage.getItem("user")) {
-      return (<Redirect to={'/Home'} />)
+      return (<Redirect to={'/'} />)
     }
     return (
       <div className="container">

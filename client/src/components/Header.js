@@ -67,7 +67,7 @@ class Header extends Component {
                   <Link to="/" className="nav-link" href="void" title="Books Networking App"> Home  <span className="sr-only">(current)</span> </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/" className="nav-link" href="void" title="Add books"> Add Books <span className="sr-only">(current)</span> </Link>
+                  <Link to="/addproduct" className="nav-link" href="void" title="Add books"> Add Books <span className="sr-only">(current)</span> </Link>
                 </li>
                 <li className="nav-item">
                   <Link to="#" className="nav-link" href="void" title="Books Networking App"> About  <span className="sr-only">(current)</span> </Link>

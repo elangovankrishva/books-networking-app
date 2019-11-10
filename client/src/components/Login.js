@@ -36,7 +36,7 @@ class Login extends React.Component {
         )
         .then(
           jsondata => {
-          if (jsondata._id != 0) {
+          if (jsondata._id !== 0) {
             this.props.user('Hi ' + jsondata.user_name);
             this.setState({ login: true });
             localStorage.setItem('user', jsondata._id);
@@ -119,7 +119,7 @@ class Login extends React.Component {
         </Dropdown>}
         <Modal isOpen={this.state.modal} toggle={this.toggle} >
           <ModalBody>
-            <label className="text-center"><h1 className="text-center title">Eripsa</h1></label>
+            <label className="text-center"><h1 className="text-center title">Books Networking App</h1></label>
             <form >
               <img src={require('../Images/user.jpg')} className="center" alt="login" />
               <div>

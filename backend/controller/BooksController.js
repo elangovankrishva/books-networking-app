@@ -4,7 +4,7 @@ exports.create = (req, res) => {
     const books = new Books(req.body);
     books.save()
         .then(books => {
-            console.log(books);
+            console.log('final data===>'+books);
             res.status(200).json({ "books": "books added successfully" });
         })
         .catch(err => {
