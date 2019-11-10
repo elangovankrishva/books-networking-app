@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Login from './Login';
 
 class Header extends Component {
   constructor(props) {
@@ -86,9 +87,10 @@ class Header extends Component {
                   Search
                 </button>
               </form>
-              <Link to="/login">
+              {/* <Link to="/login">
                 <button className="btn btn-login ml-2 whiteColor">Login</button>
-              </Link>
+              </Link> */}
+              <Login user={this.user}/>
             </div>
           </nav>
         </div>

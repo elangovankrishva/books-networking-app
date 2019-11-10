@@ -1,95 +1,149 @@
-import React, { Component } from "react";
-// import { Route, Link } from "react-router-dom";
+import React from 'react';
+import { Button, Modal, ModalBody } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-class Login extends Component {
-  constructor() {
-    super();
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      email: "",
-      password: "",
-      emailError: false
-    };
+      username: '',
+      password: '',
+      login: false,
+      model: false,
+      error: false,
+      Showprofile: false
+    }
+    this.login = this.login.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.validateForm = this.validateForm.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.logout = this.logout.bind(this);
+    this.dropdowntoggle = this.dropdowntoggle.bind(this);
   }
 
-  canBeSubmitted() {
-    const { password } = this.state;
-    if (password.length > 4) {
-      return true;
+  login() {
+    if (this.validateForm()) {
+      // const url = 'http://localhost:4000/api/userlogin?email=' + this.state.username + '&password=' + this.state.password;
+      fetch('http://localhost:4000/api/users/5dc65ff2a26c121e9491e020',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          }
+        }).then(
+          response => response.json()
+        )
+        .then(
+          jsondata => {
+          if (jsondata._id != 0) {
+            this.props.user('Hi ' + jsondata.user_name);
+            this.setState({ login: true });
+            localStorage.setItem('user', jsondata._id);
+            localStorage.setItem('username', jsondata.user_name);
+            this.toggle();
+          }
+          else {
+            this.setState({
+              username: '',
+              password: '',
+              error: true
+            });
+          }
+        }
+        );
     }
-    return false;
   }
 
-  handleOnChange = evt => {
-    this.setState({ [evt.target.name]: evt.target.value, emailError: false });
-  };
+  componentDidMount() {
+    var value = localStorage.getItem("user");
+    if (!((value === '') || (value === null))) {
+      this.setState({ login: true });
+      this.props.user('Hi ' + localStorage.getItem("username"));
+    }
+    else {
+      this.props.user('Hi!');
+    }
+  }
 
-  handleLoginSubmit = evt => {
-    evt.preventDefault();
-    const { email, password } = this.state;
-    let re = /^([A-Za-z0-9_\-.+])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,})$/;
-    if (!re.test(email)) {
-      this.setState({ emailError: true });
-      return;
+  dropdowntoggle() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+
+  handleKeyPress(target) {
+    if (target.charCode === 13) {
+      this.login();
     }
-    if (email === "10seconds@gmail.com" && password === "test@123") {
-      alert("Successful Login !!!");
-      return;
-    }
-    alert("Invalid Credentials !!!");
-  };
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ error: false });
+  }
+
+  validateForm() {
+    return this.state.username.length > 0 && this.state.password.length > 0;
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
+  logout() {
+    localStorage.setItem("user", '');
+    localStorage.setItem("username", '');
+    localStorage.clear();
+    this.setState({ login: false });
+    this.props.user('Hi!');
+  }
 
   render() {
-    let { emailError } = this.state;
     return (
-      <div className="login-form">
-        <div className="row">
-          <div className="col-6 mx-auto mt-5">
-            <h1>Login Form </h1>
-            <div className="col-12">
-              <form onSubmit={this.handleLoginSubmit}>
-                <div className="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input
-                    type="email"
-                    className={`form-control ${emailError ? "is-invalid" : ""}`}
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    placeholder="10seconds@gmail.com"
-                    name="email"
-                    onChange={this.handleOnChange}
-                  />
-                  <small id="emailHelp" className="form-text text-muted">
-                    We'll never share your email with anyone else.
-                  </small>
+      <div>
+        {!this.state.login && <Button onClick={this.toggle}>{'Login'} </Button>}
+        {this.state.login && <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdowntoggle}>
+          <DropdownToggle className="rounded-circle" >
+            <img src={require('../Images/user.png')} alt="user" />
+          </DropdownToggle>
+          <DropdownMenu right style={{ right: 'auto' }}>
+            <DropdownItem href="/Profile" className="profile-menu"><img src={require('../Images/person.svg')} style={{ height: 15 }} alt="profile" /> {' '}
+              Profile
+              </DropdownItem>
+            <DropdownItem href="/" className="profile-menu" onClick={this.logout}><img src={require('../Images/power-standby.svg')} style={{ height: 15 }} alt="logout" /> {' '}
+              Logout</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>}
+        <Modal isOpen={this.state.modal} toggle={this.toggle} >
+          <ModalBody>
+            <label className="text-center"><h1 className="text-center title">Eripsa</h1></label>
+            <form >
+              <img src={require('../Images/user.jpg')} className="center" alt="login" />
+              <div>
+                {this.state.error && <div className="ErrorMessage">Username or password worng!!!</div>}
+                <div className="input-group input">
+                  <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
+                  <input type="text" className="form-control" name="username" id="username" placeholder="Username" value={this.state.username} onKeyPress={this.handleKeyPress} onChange={this.onChange} />
                 </div>
-                <div className="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="exampleInputPassword1"
-                    placeholder="Password"
-                    name="password"
-                    onChange={this.handleOnChange}
-                  />
-                  <small id="emailHelp" className="form-text text-muted">
-                    Minimum password length should be greater than 4.
-                  </small>
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={!this.canBeSubmitted()}
-                  onClick={this.handleLoginSubmit}
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+              </div>
+              <br />
+
+              <div className="input-group input">
+                <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
+                <input type="Password" className="form-control" name="password" id="password" placeholder="Password" value={this.state.password} onKeyPress={this.handleKeyPress} onChange={this.onChange} />
+              </div>
+
+              <br />
+              <input type="button" className="btn btn-secondary btn-block input" value="Login" id="button" onClick={this.login} />
+            </form>
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
 }
+
 export default Login;

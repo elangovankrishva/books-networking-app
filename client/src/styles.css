@@ -360,3 +360,7 @@ i{
 .product-details{
   clear:both;
 }
+
+.dropdown .profile-menu{
+  color:#007bff !important;
+}
