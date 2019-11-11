@@ -24,7 +24,7 @@ class UserProfile extends Component {
 
   componentDidMount() {
     var value = localStorage.getItem("user");
-    console.log('value--->'+value);
+    console.log('value--->' + value);
     if (!((value === '') || (value === null))) {
       this.UserDetail(value);
     }
@@ -34,37 +34,53 @@ class UserProfile extends Component {
     if (!localStorage.getItem("user")) {
       return (<Redirect to={'/'} />)
     }
+
+    let favorite = this.state.UserDetail.user_favorite_list;
+    // let techs = favorite.split(',');
+
+    // const arr = favorite.split(",").map(t => t.trim().toLowerCase());
+  
+    // const technologies = [...new Set([].concat.apply([], favorite))];
+    // const countries = [...new Set(data.map(mentor => mentor.country))];
+
+
+    console.log(technologies);
+    // var favoriteArr = favorite.split(",");
+    // let cc = favorite.split(",").map(function(n) {return Number(n);});
+
+    // console.log(techs);
     return (
       <div className="container">
         <br />
         <img src={require('../Images/user.jpg')} className="center" alt="login" />
         <br />
-        <Form >
-          <FormGroup row>
-            <Label for="name" className="text-right" sm={2}>User Name</Label>
-            <Col sm={4}>
-              <Input type="name" name="name" id="name" disabled={true} value={this.state.UserDetail.user_name} placeholder="User Name" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="exampleEmail" className="text-right" sm={2}>Email</Label>
-            <Col sm={4}>
-              <Input type="email" name="email" value={this.state.UserDetail.user_email} id="Email" disabled={true} placeholder="Email" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="Contact" className="text-right" sm={2}>Publish Books</Label>
-            <Col sm={4}>
-              <Input type="textarea" name="Contact" value={this.state.UserDetail.user_publish_books} disabled={true} id="Contact" placeholder="mobile" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="Contact" className="text-right" sm={2}>Favorite List</Label>
-            <Col sm={4}>
-              <Input type="textarea" name="Contact" value={this.state.UserDetail.user_favorite_list} disabled={true} id="Contact" placeholder="mobile" />
-            </Col>
-          </FormGroup>
-        </Form>
+
+        <div className="col-md-8">
+          <div className="card-body">
+            <h5 className="card-title">Books Details</h5>
+            <div className="product-details">
+              <div className="product-label tags details-label-left">Name : </div>
+              <div className="details-label-right">{this.state.UserDetail.user_name}</div>
+            </div>
+            <div className="product-details">
+              <div className="product-label tags details-label-left">Email : </div>
+              <div className="details-label-right">{this.state.UserDetail.user_email}</div>
+            </div>
+            <div className="product-details">
+              <div className="product-label tags details-label-left">Published Books : </div>
+              <div className="details-label-right">{this.state.UserDetail.user_publish_books}</div>
+            </div>
+            <div className="product-details">
+              <div className="product-label tags details-label-left">Favorite List : </div>
+              <div className="details-label-right">{this.state.UserDetail.user_favorite_list}</div>
+              {/* {favorite.map((favr, i) => (
+                <div key={i} className="tags">
+                  <span>{favr}</span>
+                </div>
+              ))} */}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

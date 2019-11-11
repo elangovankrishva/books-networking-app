@@ -33,7 +33,6 @@ class ProductsList extends Component {
               <p><span className="product-label tags">AUTHOR:</span> {books.books_author}</p>
               <p><span className="product-label tags">PRICE:</span> {books.books_price}</p>
               <p><span className="product-label tags">QTY:</span> {books.books_qty}</p>
-              <p><span className="product-label tags">STOCK:</span> {books.books_stock}</p>
             </div>
           </Link>
         </div>
