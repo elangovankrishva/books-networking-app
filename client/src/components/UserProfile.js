@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class UserProfile extends Component {
 
@@ -36,19 +37,11 @@ class UserProfile extends Component {
     }
 
     let favorite = this.state.UserDetail.user_favorite_list;
-    // let techs = favorite.split(',');
+    let favorites = [...new Set([].concat.apply([], favorite))];
 
-    // const arr = favorite.split(",").map(t => t.trim().toLowerCase());
-  
-    // const technologies = [...new Set([].concat.apply([], favorite))];
-    // const countries = [...new Set(data.map(mentor => mentor.country))];
+    let pub_book = this.state.UserDetail.user_publish_books;
+    let pub_books = [...new Set([].concat.apply([], pub_book))];
 
-
-    console.log(technologies);
-    // var favoriteArr = favorite.split(",");
-    // let cc = favorite.split(",").map(function(n) {return Number(n);});
-
-    // console.log(techs);
     return (
       <div className="container">
         <br />
@@ -57,7 +50,7 @@ class UserProfile extends Component {
 
         <div className="col-md-8">
           <div className="card-body">
-            <h5 className="card-title">Books Details</h5>
+            <h5 className="card-title">User Details</h5>
             <div className="product-details">
               <div className="product-label tags details-label-left">Name : </div>
               <div className="details-label-right">{this.state.UserDetail.user_name}</div>
@@ -68,16 +61,37 @@ class UserProfile extends Component {
             </div>
             <div className="product-details">
               <div className="product-label tags details-label-left">Published Books : </div>
-              <div className="details-label-right">{this.state.UserDetail.user_publish_books}</div>
+              <div className="details-label-right">
+                {pub_books.map((pub_book, i) => (
+                  <div key={i} className="tags">
+                    <Link
+                      to={{
+                        pathname: `/product_details/${pub_book}`,
+                        state: { books: pub_book },
+                      }}
+                    >
+                      <p>{pub_book}</p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="product-details">
               <div className="product-label tags details-label-left">Favorite List : </div>
-              <div className="details-label-right">{this.state.UserDetail.user_favorite_list}</div>
-              {/* {favorite.map((favr, i) => (
-                <div key={i} className="tags">
-                  <span>{favr}</span>
-                </div>
-              ))} */}
+              <div className="details-label-right">
+                {favorites.map((favr, i) => (
+                  <div key={i} className="tags">
+                    <Link
+                      to={{
+                        pathname: `/product_details/${favr}`,
+                        state: { books: favr },
+                      }}
+                    >
+                      <p>{favr}</p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
